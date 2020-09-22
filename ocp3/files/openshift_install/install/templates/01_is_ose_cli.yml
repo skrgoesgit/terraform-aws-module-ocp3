@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  name: ose-cli
+  namespace: cluster-ops
+spec:
+  tags:
+  - name: latest
+    from:
+      kind: DockerImage
+      name: registry.access.redhat.com/openshift3/ose-cli
+    importPolicy: {}
+    referencePolicy:
+      type: Source
+
+# vi: filetype=yaml

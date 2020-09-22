@@ -1,0 +1,15 @@
+.terraform
+.terragrunt-cache
+*.tfstate
+*.tfstate.backup
+*.swp
+**/*.pem
+**/hosts
+**/openshift_inventory
+**/vars.yml
+**/fix_node_labels.sh
+**/pre_install_ocp3.yml
+**/post_install_ocp3.yml
+**/*cm_ldap_group_sync.yml
+**/destroy_ocp3_nodes.yml
+**/files/id_rsa

@@ -1,0 +1,14 @@
+apiVersion: authorization.openshift.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ldap-group-sync
+roleRef:
+  name: ldap-group-sync
+subjects:
+- kind: ServiceAccount
+  name: ldap-group-syncer
+  namespace: cluster-ops
+userNames:
+- system:serviceaccount:cluster-ops:ldap-group-syncer
+
+# vi: filetype=yaml

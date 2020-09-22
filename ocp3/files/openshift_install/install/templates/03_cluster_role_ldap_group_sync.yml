@@ -1,0 +1,16 @@
+apiVersion: authorization.openshift.io/v1
+kind: ClusterRole
+metadata:
+  name: ldap-group-sync
+rules:
+- apiGroups:
+  - user.openshift.io
+  resources:
+  - groups
+  verbs:
+  - create
+  - get
+  - list
+  - update
+
+# vi: filetype=yaml

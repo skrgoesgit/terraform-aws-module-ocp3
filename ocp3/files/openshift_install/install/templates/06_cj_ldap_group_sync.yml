@@ -1,0 +1,49 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: ldap-group-sync
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          activeDeadlineSeconds: 500
+          containers:
+          - command:
+            - /bin/bash
+            - -c
+            - 'oc adm groups sync --whitelist=/etc/config/whitelist.txt --sync-config=/etc/config/ldap-group-sync.yaml
+              --confirm || :'
+            image: docker-registry.default.svc:5000/cluster-ops/ose-cli:latest
+            imagePullPolicy: Always
+            name: ldap-group-sync
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+            - mountPath: /etc/config
+              name: ldap-sync-volume
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          securityContext: {}
+          serviceAccount: ldap-group-syncer
+          serviceAccountName: ldap-group-syncer
+          terminationGracePeriodSeconds: 30
+          volumes:
+          - configMap:
+              defaultMode: 420
+              items:
+              - key: ldap-sync.yml
+                path: ldap-group-sync.yaml
+              - key: whitelist.txt
+                path: whitelist.txt
+              name: ldap-sync-config
+            name: ldap-sync-volume
+  schedule: '*/10 * * * *'
+  successfulJobsHistoryLimit: 5
+  suspend: false
+
+# vi: filetype=yaml
